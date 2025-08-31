@@ -50,10 +50,10 @@ const Transactions: React.FC = () => {
           variant="body2"
           sx={{
             fontWeight: 'bold',
-            color: params.value >= 0 ? 'success.main' : 'error.main',
+            color: (params.value || 0) >= 0 ? 'success.main' : 'error.main',
           }}
         >
-          {params.value.toFixed(2)}
+          {typeof params.value === 'number' ? params.value.toFixed(2) : '0.00'}
         </Typography>
       ),
     },
