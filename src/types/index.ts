@@ -14,7 +14,7 @@ export interface User {
 export interface Transaction {
   id: number;
   reference: string;
-  amount: number;
+  amount: string | number; // Can be either string or number from backend
   currency: string;
   message?: string;
   timestamp: string;

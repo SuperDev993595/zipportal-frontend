@@ -20,7 +20,11 @@ import { User, Transaction } from '../types';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<{
+    totalUsers: number;
+    totalTransactions: number;
+    totalAmount: number;
+  }>({
     totalUsers: 0,
     totalTransactions: 0,
     totalAmount: 0,
@@ -41,7 +45,13 @@ const Dashboard: React.FC = () => {
 
         const users = usersResponse.data || [];
         const transactions = transactionsResponse.data || [];
-        const totalAmount = transactions.reduce((sum, t) => sum + t.amount, 0);
+        const totalAmount = transactions.reduce((sum, t) => {
+          const amount = typeof t.amount === 'string' ? parseFloat(t.amount) || 0 : (t.amount || 0);
+          console.log(`Transaction ${t.reference}: amount=${t.amount}, parsed=${amount}`);
+          return sum + amount;
+        }, 0);
+
+        console.log('Total amount calculated:', totalAmount);
 
         setStats({
           totalUsers: users.length,
