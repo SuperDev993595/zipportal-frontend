@@ -92,7 +92,7 @@ const Transactions: React.FC = () => {
       headerName: 'User Name',
       width: 200,
       sortable: true,
-      valueGetter: (params) => params.row.User?.name || 'N/A',
+      valueGetter: (params: any) => params.row.User?.name || 'N/A',
     },
     {
       field: 'amount',
@@ -100,7 +100,7 @@ const Transactions: React.FC = () => {
       width: 120,
       sortable: true,
       type: 'number',
-      valueFormatter: (params) => `$${params.value.toFixed(2)}`,
+              valueFormatter: (params: any) => `$${params.value.toFixed(2)}`,
       renderCell: (params) => (
         <Typography
           variant="body2"
@@ -156,7 +156,7 @@ const Transactions: React.FC = () => {
       headerName: 'Date',
       width: 150,
       sortable: true,
-      valueFormatter: (params) => new Date(params.value).toLocaleDateString(),
+              valueFormatter: (params: any) => new Date(params.value).toLocaleDateString(),
     },
     {
       field: 'actions',
@@ -180,7 +180,7 @@ const Transactions: React.FC = () => {
           icon={<DeleteIcon />}
           label="Delete"
           onClick={() => handleDeleteTransaction(params.row.transactionId)}
-          color="error"
+          color="primary"
         />,
       ],
     },
@@ -219,9 +219,12 @@ const Transactions: React.FC = () => {
         <DataGrid
           rows={transactions}
           columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          disableSelectionOnClick
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+          }}
+          pageSizeOptions={[10, 25, 50]}
           getRowId={(row) => row.transactionId}
           sx={{
             '& .MuiDataGrid-cell:focus': {
