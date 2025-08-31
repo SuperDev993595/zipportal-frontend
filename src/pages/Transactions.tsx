@@ -77,7 +77,24 @@ const Transactions: React.FC = () => {
       headerName: 'Timestamp',
       width: 180,
       sortable: true,
-      valueFormatter: (params: any) => new Date(params.value).toLocaleString(),
+      valueFormatter: (params: any) => {
+        try {
+          const date = new Date(params.value);
+          if (isNaN(date.getTime())) {
+            return 'Invalid Date';
+          }
+          return date.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+          });
+        } catch (error) {
+          return 'Invalid Date';
+        }
+      },
     },
 
   ];

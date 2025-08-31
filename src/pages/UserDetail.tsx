@@ -161,7 +161,19 @@ const UserDetail: React.FC = () => {
                   Birthday
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                  {user.birthday ? new Date(user.birthday).toLocaleDateString() : 'N/A'}
+                  {user.birthday ? (() => {
+                    try {
+                      const date = new Date(user.birthday);
+                      if (isNaN(date.getTime())) return 'Invalid Date';
+                      return date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      });
+                    } catch (error) {
+                      return 'Invalid Date';
+                    }
+                  })() : 'N/A'}
                 </Typography>
               </Box>
               <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
@@ -185,7 +197,19 @@ const UserDetail: React.FC = () => {
                   Created
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                  {new Date(user.createdAt).toLocaleDateString()}
+                  {(() => {
+                    try {
+                      const date = new Date(user.createdAt);
+                      if (isNaN(date.getTime())) return 'Invalid Date';
+                      return date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      });
+                    } catch (error) {
+                      return 'Invalid Date';
+                    }
+                  })()}
                 </Typography>
               </Box>
             </Stack>

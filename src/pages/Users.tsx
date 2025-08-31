@@ -86,7 +86,22 @@ const Users: React.FC = () => {
       headerName: 'Birthday',
       width: 120,
       sortable: true,
-      valueFormatter: (params: any) => params.value ? new Date(params.value).toLocaleDateString() : 'N/A',
+      valueFormatter: (params: any) => {
+        if (!params.value) return 'N/A';
+        try {
+          const date = new Date(params.value);
+          if (isNaN(date.getTime())) {
+            return 'Invalid Date';
+          }
+          return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          });
+        } catch (error) {
+          return 'Invalid Date';
+        }
+      },
     },
     {
       field: 'avatar',
