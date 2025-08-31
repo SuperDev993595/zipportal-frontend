@@ -58,42 +58,35 @@ const Users: React.FC = () => {
       sortable: true,
     },
     {
-      field: 'name',
-      headerName: 'Name',
-      width: 200,
+      field: 'firstName',
+      headerName: 'First Name',
+      width: 150,
       sortable: true,
     },
     {
-      field: 'email',
-      headerName: 'Email',
-      width: 250,
+      field: 'lastName',
+      headerName: 'Last Name',
+      width: 150,
       sortable: true,
     },
     {
-      field: 'role',
-      headerName: 'Role',
+      field: 'country',
+      headerName: 'Country',
+      width: 100,
+      sortable: true,
+    },
+    {
+      field: 'phone',
+      headerName: 'Phone',
+      width: 150,
+      sortable: true,
+    },
+    {
+      field: 'birthday',
+      headerName: 'Birthday',
       width: 120,
       sortable: true,
-    },
-    {
-      field: 'status',
-      headerName: 'Status',
-      width: 120,
-      sortable: true,
-      renderCell: (params) => (
-        <Box
-          sx={{
-            backgroundColor: params.value === 'active' ? '#e8f5e8' : '#ffebee',
-            color: params.value === 'active' ? '#2e7d32' : '#c62828',
-            padding: '4px 8px',
-            borderRadius: '12px',
-            fontSize: '0.75rem',
-            fontWeight: 'bold',
-          }}
-        >
-          {params.value || 'N/A'}
-        </Box>
-      ),
+      valueFormatter: (params: any) => params.value ? new Date(params.value).toLocaleDateString() : 'N/A',
     },
     {
       field: 'avatar',
@@ -136,7 +129,7 @@ const Users: React.FC = () => {
       headerName: 'Created',
       width: 150,
       sortable: true,
-              valueFormatter: (params: any) => new Date(params.value).toLocaleDateString(),
+      valueFormatter: (params: any) => new Date(params.value).toLocaleDateString(),
     },
     {
       field: 'actions',
