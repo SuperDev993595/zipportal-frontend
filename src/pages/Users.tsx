@@ -124,13 +124,7 @@ const Users: React.FC = () => {
         )
       ),
     },
-    {
-      field: 'createdAt',
-      headerName: 'Created',
-      width: 150,
-      sortable: true,
-      valueFormatter: (params: any) => new Date(params.value).toLocaleDateString(),
-    },
+
     {
       field: 'actions',
       type: 'actions',

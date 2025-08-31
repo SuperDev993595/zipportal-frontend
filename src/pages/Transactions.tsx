@@ -50,10 +50,13 @@ const Transactions: React.FC = () => {
           variant="body2"
           sx={{
             fontWeight: 'bold',
-            color: (params.value || 0) >= 0 ? 'success.main' : 'error.main',
+            color: (parseFloat(params.value) || 0) >= 0 ? 'success.main' : 'error.main',
           }}
         >
-          {typeof params.value === 'number' ? params.value.toFixed(2) : '0.00'}
+          {(() => {
+            const numValue = parseFloat(params.value);
+            return !isNaN(numValue) ? numValue.toFixed(2) : '0.00';
+          })()}
         </Typography>
       ),
     },
@@ -76,13 +79,7 @@ const Transactions: React.FC = () => {
       sortable: true,
       valueFormatter: (params: any) => new Date(params.value).toLocaleString(),
     },
-    {
-      field: 'createdAt',
-      headerName: 'Created',
-      width: 150,
-      sortable: true,
-      valueFormatter: (params: any) => new Date(params.value).toLocaleDateString(),
-    },
+
   ];
 
   if (loading) {
