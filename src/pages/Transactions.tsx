@@ -3,13 +3,10 @@ import {
   Box,
   Typography,
   Paper,
-  Button,
   Alert,
   CircularProgress,
-  Chip,
 } from '@mui/material';
-import { DataGrid, GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
-import { Visibility as ViewIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { transactionsApi } from '../services/api';
 import { Transaction } from '../types';
 
@@ -36,71 +33,18 @@ const Transactions: React.FC = () => {
     }
   };
 
-  const handleDeleteTransaction = async (transactionId: string) => {
-    if (window.confirm('Are you sure you want to delete this transaction?')) {
-      try {
-        await transactionsApi.delete(transactionId);
-        await fetchTransactions(); // Refresh the list
-      } catch (err) {
-        setError('Failed to delete transaction');
-        console.error('Error deleting transaction:', err);
-      }
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'completed':
-        return 'success';
-      case 'pending':
-        return 'warning';
-      case 'failed':
-        return 'error';
-      default:
-        return 'default';
-    }
-  };
-
-  const getTypeColor = (type: string) => {
-    switch (type.toLowerCase()) {
-      case 'credit':
-        return 'success';
-      case 'debit':
-        return 'error';
-      case 'transfer':
-        return 'info';
-      default:
-        return 'default';
-    }
-  };
-
   const columns: GridColDef[] = [
     {
-      field: 'transactionId',
-      headerName: 'Transaction ID',
-      width: 180,
+      field: 'reference',
+      headerName: 'Reference',
+      width: 250,
       sortable: true,
-    },
-    {
-      field: 'userId',
-      headerName: 'User ID',
-      width: 150,
-      sortable: true,
-    },
-    {
-      field: 'User.name',
-      headerName: 'User Name',
-      width: 200,
-      sortable: true,
-      valueGetter: (params: any) => params.row.User?.name || 'N/A',
     },
     {
       field: 'amount',
       headerName: 'Amount',
       width: 120,
       sortable: true,
-      type: 'number',
-              valueFormatter: (params: any) => `$${params.value.toFixed(2)}`,
       renderCell: (params) => (
         <Typography
           variant="body2"
@@ -109,80 +53,35 @@ const Transactions: React.FC = () => {
             color: params.value >= 0 ? 'success.main' : 'error.main',
           }}
         >
-          ${params.value.toFixed(2)}
+          {params.value.toFixed(2)}
         </Typography>
       ),
     },
     {
-      field: 'type',
-      headerName: 'Type',
-      width: 120,
+      field: 'currency',
+      headerName: 'Currency',
+      width: 100,
       sortable: true,
-      renderCell: (params) => (
-        <Chip
-          label={params.value}
-          color={getTypeColor(params.value) as any}
-          size="small"
-          variant="outlined"
-        />
-      ),
     },
     {
-      field: 'status',
-      headerName: 'Status',
-      width: 120,
-      sortable: true,
-      renderCell: (params) => (
-        <Chip
-          label={params.value}
-          color={getStatusColor(params.value) as any}
-          size="small"
-        />
-      ),
-    },
-    {
-      field: 'description',
-      headerName: 'Description',
-      width: 250,
+      field: 'message',
+      headerName: 'Message',
+      width: 300,
       sortable: false,
-      renderCell: (params) => (
-        <Typography variant="body2" noWrap>
-          {params.value || 'No description'}
-        </Typography>
-      ),
     },
     {
-      field: 'date',
-      headerName: 'Date',
+      field: 'timestamp',
+      headerName: 'Timestamp',
+      width: 180,
+      sortable: true,
+      valueFormatter: (params: any) => new Date(params.value).toLocaleString(),
+    },
+    {
+      field: 'createdAt',
+      headerName: 'Created',
       width: 150,
       sortable: true,
-              valueFormatter: (params: any) => new Date(params.value).toLocaleDateString(),
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
-      width: 150,
-      getActions: (params) => [
-        <GridActionsCellItem
-          icon={<ViewIcon />}
-          label="View"
-          onClick={() => console.log('View transaction:', params.row.transactionId)}
-          color="primary"
-        />,
-        <GridActionsCellItem
-          icon={<EditIcon />}
-          label="Edit"
-          onClick={() => console.log('Edit transaction:', params.row.transactionId)}
-          color="primary"
-        />,
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          label="Delete"
-          onClick={() => handleDeleteTransaction(params.row.transactionId)}
-          color="primary"
-        />,
-      ],
+      valueFormatter: (params: any) => new Date(params.value).toLocaleDateString(),
     },
   ];
 
@@ -196,18 +95,13 @@ const Transactions: React.FC = () => {
 
   return (
     <Box>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4" component="h1">
-          Transactions
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => window.location.href = '/upload'}
-        >
-          Upload New Data
-        </Button>
-      </Box>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Transactions
+      </Typography>
+      
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+        View all transaction records
+      </Typography>
 
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -225,7 +119,7 @@ const Transactions: React.FC = () => {
             },
           }}
           pageSizeOptions={[10, 25, 50]}
-          getRowId={(row) => row.transactionId}
+          getRowId={(row) => row.reference}
           sx={{
             '& .MuiDataGrid-cell:focus': {
               outline: 'none',
