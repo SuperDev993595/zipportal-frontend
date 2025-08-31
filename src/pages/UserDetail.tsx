@@ -16,8 +16,6 @@ import {
 } from '@mui/material';
 import {
   ArrowBack as BackIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
 } from '@mui/icons-material';
 import { usersApi } from '../services/api';
 import { User } from '../types';
@@ -49,17 +47,7 @@ const UserDetail: React.FC = () => {
     }
   };
 
-  const handleDeleteUser = async () => {
-    if (!user || !window.confirm('Are you sure you want to delete this user?')) return;
 
-    try {
-      await usersApi.delete(user.userId);
-      navigate('/users');
-    } catch (err) {
-      setError('Failed to delete user');
-      console.error('Error deleting user:', err);
-    }
-  };
 
   if (loading) {
     return (
@@ -109,23 +97,7 @@ const UserDetail: React.FC = () => {
                   {user.firstName.charAt(0).toUpperCase()}
                 </Avatar>
               )}
-              <Box display="flex" gap={1}>
-                <Button
-                  variant="outlined"
-                  startIcon={<EditIcon />}
-                  onClick={() => console.log('Edit user:', user.userId)}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  startIcon={<DeleteIcon />}
-                  onClick={handleDeleteUser}
-                >
-                  Delete
-                </Button>
-              </Box>
+              
             </Box>
           </Box>
 
