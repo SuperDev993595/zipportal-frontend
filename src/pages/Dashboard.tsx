@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Grid,
+  Stack,
   Card,
   CardContent,
   Typography,
@@ -106,9 +106,9 @@ const Dashboard: React.FC = () => {
       </Typography>
       
       {/* Stats Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Stack direction="row" spacing={3} sx={{ mb: 4, flexWrap: 'wrap' }}>
         {dashboardCards.map((card, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+          <Box key={index} sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.33% - 16px)' } }}>
             <Card 
               sx={{ 
                 height: '100%',
@@ -131,18 +131,18 @@ const Dashboard: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Stack>
 
       {/* Quick Actions */}
       <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
         Quick Actions
       </Typography>
       
-      <Grid container spacing={3}>
+      <Stack direction="row" spacing={3} sx={{ flexWrap: 'wrap' }}>
         {quickActions.map((action, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+          <Box key={index} sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(33.33% - 16px)' } }}>
             <Paper 
               sx={{ 
                 p: 3, 
@@ -164,9 +164,9 @@ const Dashboard: React.FC = () => {
                 {action.description}
               </Typography>
             </Paper>
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Stack>
     </Box>
   );
 };
