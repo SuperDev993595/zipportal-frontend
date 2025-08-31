@@ -9,7 +9,7 @@ import {
   CircularProgress,
   Card,
   CardContent,
-  Grid,
+  Stack,
 } from '@mui/material';
 import {
   CloudUpload as UploadIcon,
@@ -122,16 +122,16 @@ const Upload: React.FC = () => {
       {selectedFile && (
         <Card sx={{ mt: 3 }}>
           <CardContent>
-            <Grid container alignItems="center" spacing={2}>
-              <Grid item xs>
+            <Stack direction="row" alignItems="center" spacing={2} sx={{ flexWrap: 'wrap' }}>
+              <Box sx={{ flex: 1, minWidth: 200 }}>
                 <Typography variant="h6" gutterBottom>
                   Selected File
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
                 </Typography>
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box>
                 <Button
                   variant="contained"
                   color="primary"
@@ -141,13 +141,13 @@ const Upload: React.FC = () => {
                 >
                   {uploading ? 'Uploading...' : 'Upload File'}
                 </Button>
-              </Grid>
-              <Grid item>
+              </Box>
+              <Box>
                 <Button variant="outlined" onClick={handleClear}>
                   Clear
                 </Button>
-              </Grid>
-            </Grid>
+              </Box>
+            </Stack>
           </CardContent>
         </Card>
       )}
@@ -170,32 +170,32 @@ const Upload: React.FC = () => {
               </Typography>
             </Box>
             
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={4}>
+            <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap' }}>
+              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(33.33% - 16px)' } }}>
                 <Typography variant="body2" color="text.secondary">
                   Users Processed
                 </Typography>
                 <Typography variant="h6" color="success.main">
                   {uploadResult.usersProcessed}
                 </Typography>
-              </Grid>
-              <Grid item xs={12} sm={4}>
+              </Box>
+              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(33.33% - 16px)' } }}>
                 <Typography variant="body2" color="text.secondary">
                   Transactions Processed
                 </Typography>
                 <Typography variant="h6" color="success.main">
                   {uploadResult.transactionsProcessed}
                 </Typography>
-              </Grid>
-              <Grid item xs={12} sm={4}>
+              </Box>
+              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(33.33% - 16px)' } }}>
                 <Typography variant="body2" color="text.secondary">
                   Avatar Processed
                 </Typography>
                 <Typography variant="h6" color="success.main">
                   {uploadResult.avatarProcessed ? 'Yes' : 'No'}
                 </Typography>
-              </Grid>
-            </Grid>
+              </Box>
+            </Stack>
             
             <Typography variant="body2" sx={{ mt: 2 }}>
               {uploadResult.message}
