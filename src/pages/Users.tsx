@@ -1,0 +1,216 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Typography,
+  Paper,
+  Button,
+  Alert,
+  CircularProgress,
+} from '@mui/material';
+import { DataGrid, GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
+import { Visibility as ViewIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { usersApi } from '../services/api';
+import { User } from '../types';
+
+const Users: React.FC = () => {
+  const navigate = useNavigate();
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await usersApi.getAll();
+      setUsers(response.data || []);
+      setError(null);
+    } catch (err) {
+      setError('Failed to fetch users');
+      console.error('Error fetching users:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteUser = async (userId: string) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      try {
+        await usersApi.delete(userId);
+        await fetchUsers(); // Refresh the list
+      } catch (err) {
+        setError('Failed to delete user');
+        console.error('Error deleting user:', err);
+      }
+    }
+  };
+
+  const columns: GridColDef[] = [
+    {
+      field: 'userId',
+      headerName: 'User ID',
+      width: 150,
+      sortable: true,
+    },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 200,
+      sortable: true,
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      width: 250,
+      sortable: true,
+    },
+    {
+      field: 'role',
+      headerName: 'Role',
+      width: 120,
+      sortable: true,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 120,
+      sortable: true,
+      renderCell: (params) => (
+        <Box
+          sx={{
+            backgroundColor: params.value === 'active' ? '#e8f5e8' : '#ffebee',
+            color: params.value === 'active' ? '#2e7d32' : '#c62828',
+            padding: '4px 8px',
+            borderRadius: '12px',
+            fontSize: '0.75rem',
+            fontWeight: 'bold',
+          }}
+        >
+          {params.value || 'N/A'}
+        </Box>
+      ),
+    },
+    {
+      field: 'avatar',
+      headerName: 'Avatar',
+      width: 100,
+      sortable: false,
+      renderCell: (params) => (
+        params.value ? (
+          <img
+            src={`http://localhost:5000/uploads/${params.value}`}
+            alt="Avatar"
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: '50%',
+              objectFit: 'cover',
+            }}
+          />
+        ) : (
+          <Box
+            sx={{
+              width: 40,
+              height: 40,
+              borderRadius: '50%',
+              backgroundColor: '#e0e0e0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography variant="body2" color="text.secondary">
+              No Avatar
+            </Typography>
+          </Box>
+        )
+      ),
+    },
+    {
+      field: 'createdAt',
+      headerName: 'Created',
+      width: 150,
+      sortable: true,
+      valueFormatter: (params) => new Date(params.value).toLocaleDateString(),
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 150,
+      getActions: (params) => [
+        <GridActionsCellItem
+          icon={<ViewIcon />}
+          label="View"
+          onClick={() => navigate(`/users/${params.row.userId}`)}
+          color="primary"
+        />,
+        <GridActionsCellItem
+          icon={<EditIcon />}
+          label="Edit"
+          onClick={() => navigate(`/users/${params.row.userId}`)}
+          color="primary"
+        />,
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete"
+          onClick={() => handleDeleteUser(params.row.userId)}
+          color="error"
+        />,
+      ],
+    },
+  ];
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  return (
+    <Box>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+        <Typography variant="h4" component="h1">
+          Users
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/upload')}
+        >
+          Upload New Data
+        </Button>
+      </Box>
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      <Paper sx={{ height: 600, width: '100%' }}>
+        <DataGrid
+          rows={users}
+          columns={columns}
+          pageSize={10}
+          rowsPerPageOptions={[10, 25, 50]}
+          disableSelectionOnClick
+          getRowId={(row) => row.userId}
+          sx={{
+            '& .MuiDataGrid-cell:focus': {
+              outline: 'none',
+            },
+          }}
+        />
+      </Paper>
+    </Box>
+  );
+};
+
+export default Users;
