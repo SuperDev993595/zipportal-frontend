@@ -1,33 +1,30 @@
 export interface User {
   id: number;
   userId: string;
-  name: string;
-  email: string;
+  firstName: string;
+  lastName: string;
+  birthday?: string;
+  country?: string;
+  phone?: string;
   avatar?: string;
-  role?: string;
-  status?: string;
   createdAt: string;
   updatedAt: string;
-  Transactions?: Transaction[];
 }
 
 export interface Transaction {
   id: number;
-  transactionId: string;
-  userId: string;
+  reference: string;
   amount: number;
-  type: string;
-  description?: string;
-  status: string;
-  date: string;
+  currency: string;
+  message?: string;
+  timestamp: string;
   createdAt: string;
   updatedAt: string;
-  User?: User;
 }
 
 export interface UploadResponse {
   message: string;
-  usersProcessed: number;
+  userProcessed: boolean;
   transactionsProcessed: number;
   avatarProcessed: boolean;
 }
