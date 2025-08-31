@@ -19,9 +19,8 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { usersApi } from '../services/api';
-import { User, Transaction } from '../types';
+import { User } from '../types';
 
 const UserDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -61,69 +60,6 @@ const UserDetail: React.FC = () => {
       console.error('Error deleting user:', err);
     }
   };
-
-  const transactionColumns: GridColDef[] = [
-    {
-      field: 'transactionId',
-      headerName: 'Transaction ID',
-      width: 180,
-    },
-    {
-      field: 'amount',
-      headerName: 'Amount',
-      width: 120,
-      renderCell: (params) => (
-        <Typography
-          variant="body2"
-          sx={{
-            fontWeight: 'bold',
-            color: params.value >= 0 ? 'success.main' : 'error.main',
-          }}
-        >
-          ${params.value.toFixed(2)}
-        </Typography>
-      ),
-    },
-    {
-      field: 'type',
-      headerName: 'Type',
-      width: 120,
-      renderCell: (params) => (
-        <Chip
-          label={params.value}
-          color={params.value === 'credit' ? 'success' : 'error'}
-          size="small"
-          variant="outlined"
-        />
-      ),
-    },
-    {
-      field: 'status',
-      headerName: 'Status',
-      width: 120,
-      renderCell: (params) => (
-        <Chip
-          label={params.value}
-          color={
-            params.value === 'completed' ? 'success' : 
-            params.value === 'pending' ? 'warning' : 'error'
-          }
-          size="small"
-        />
-      ),
-    },
-    {
-      field: 'description',
-      headerName: 'Description',
-      width: 250,
-    },
-    {
-      field: 'date',
-      headerName: 'Date',
-      width: 150,
-              valueFormatter: (params: any) => new Date(params.value).toLocaleDateString(),
-    },
-  ];
 
   if (loading) {
     return (
@@ -170,7 +106,7 @@ const UserDetail: React.FC = () => {
                 />
               ) : (
                 <Avatar sx={{ width: 120, height: 120, mb: 2, fontSize: '3rem' }}>
-                  {user.name.charAt(0).toUpperCase()}
+                  {user.firstName.charAt(0).toUpperCase()}
                 </Avatar>
               )}
               <Box display="flex" gap={1}>
@@ -196,98 +132,82 @@ const UserDetail: React.FC = () => {
           {/* User Details */}
           <Box sx={{ minWidth: { xs: '100%', md: 'calc(75% - 18px)' } }}>
             <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap' }}>
-                              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
-                  <Typography variant="body2" color="text.secondary">
-                    User ID
-                  </Typography>
-                  <Typography variant="h6" gutterBottom>
-                    {user.userId}
-                  </Typography>
-                </Box>
-                <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
-                  <Typography variant="body2" color="text.secondary">
-                    Name
-                  </Typography>
-                  <Typography variant="h6" gutterBottom>
-                    {user.name}
-                  </Typography>
-                </Box>
-                <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
-                  <Typography variant="body2" color="text.secondary">
-                    Email
-                  </Typography>
-                  <Typography variant="h6" gutterBottom>
-                    {user.email}
-                  </Typography>
-                </Box>
-                <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
-                  <Typography variant="body2" color="text.secondary">
-                    Role
-                  </Typography>
-                  <Typography variant="h6" gutterBottom>
-                    {user.role || 'N/A'}
-                  </Typography>
-                </Box>
-                <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
-                  <Typography variant="body2" color="text.secondary">
-                    Status
-                  </Typography>
-                  <Chip
-                    label={user.status || 'N/A'}
-                    color={user.status === 'active' ? 'success' : 'default'}
-                    size="small"
-                  />
-                </Box>
-                <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
-                  <Typography variant="body2" color="text.secondary">
-                    Created
-                  </Typography>
-                  <Typography variant="h6" gutterBottom>
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </Typography>
-                </Box>
+              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                <Typography variant="body2" color="text.secondary">
+                  User ID
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {user.userId}
+                </Typography>
+              </Box>
+              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                <Typography variant="body2" color="text.secondary">
+                  First Name
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {user.firstName}
+                </Typography>
+              </Box>
+              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                <Typography variant="body2" color="text.secondary">
+                  Last Name
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {user.lastName}
+                </Typography>
+              </Box>
+              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                <Typography variant="body2" color="text.secondary">
+                  Birthday
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {user.birthday ? new Date(user.birthday).toLocaleDateString() : 'N/A'}
+                </Typography>
+              </Box>
+              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                <Typography variant="body2" color="text.secondary">
+                  Country
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {user.country || 'N/A'}
+                </Typography>
+              </Box>
+              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                <Typography variant="body2" color="text.secondary">
+                  Phone
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {user.phone || 'N/A'}
+                </Typography>
+              </Box>
+              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                <Typography variant="body2" color="text.secondary">
+                  Created
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {new Date(user.createdAt).toLocaleDateString()}
+                </Typography>
+              </Box>
             </Stack>
           </Box>
         </Stack>
       </Paper>
 
-      {/* Transactions Section */}
+      {/* Note about Transactions */}
       <Paper sx={{ p: 3 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography variant="h5" component="h2">
-            Transactions
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {user.Transactions?.length || 0} transactions found
-          </Typography>
-        </Box>
-
-        {user.Transactions && user.Transactions.length > 0 ? (
-          <Box sx={{ height: 400, width: '100%' }}>
-            <DataGrid
-              rows={user.Transactions}
-              columns={transactionColumns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
-                },
-              }}
-              pageSizeOptions={[5, 10, 25]}
-              getRowId={(row) => row.transactionId}
-              sx={{
-                '& .MuiDataGrid-cell:focus': {
-                  outline: 'none',
-                },
-              }}
-            />
-          </Box>
-        ) : (
-          <Box textAlign="center" py={4}>
-            <Typography variant="body1" color="text.secondary">
-              No transactions found for this user.
-            </Typography>
-          </Box>
-        )}
+        <Typography variant="h5" component="h2" gutterBottom>
+          Transactions
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Transactions are now stored independently and can be viewed on the Transactions page.
+        </Typography>
+        <Button
+          variant="outlined"
+          onClick={() => navigate('/transactions')}
+          sx={{ mt: 2 }}
+        >
+          View All Transactions
+        </Button>
       </Paper>
     </Box>
   );
