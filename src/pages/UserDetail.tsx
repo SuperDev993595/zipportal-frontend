@@ -4,7 +4,7 @@ import {
   Box,
   Typography,
   Paper,
-  Grid,
+  Stack,
   Card,
   CardContent,
   Avatar,
@@ -121,7 +121,7 @@ const UserDetail: React.FC = () => {
       field: 'date',
       headerName: 'Date',
       width: 150,
-      valueFormatter: (params) => new Date(params.value).toLocaleDateString(),
+              valueFormatter: (params: any) => new Date(params.value).toLocaleDateString(),
     },
   ];
 
@@ -159,9 +159,9 @@ const UserDetail: React.FC = () => {
 
       {/* User Information */}
       <Paper sx={{ p: 3, mb: 3 }}>
-        <Grid container spacing={3}>
+        <Stack direction="row" spacing={3} sx={{ flexWrap: 'wrap' }}>
           {/* Avatar Section */}
-          <Grid item xs={12} md={3}>
+          <Box sx={{ minWidth: { xs: '100%', md: 'calc(25% - 18px)' } }}>
             <Box display="flex" flexDirection="column" alignItems="center">
               {user.avatar ? (
                 <Avatar
@@ -191,64 +191,64 @@ const UserDetail: React.FC = () => {
                 </Button>
               </Box>
             </Box>
-          </Grid>
+          </Box>
 
           {/* User Details */}
-          <Grid item xs={12} md={9}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="body2" color="text.secondary">
-                  User ID
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  {user.userId}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="body2" color="text.secondary">
-                  Name
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  {user.name}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="body2" color="text.secondary">
-                  Email
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  {user.email}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="body2" color="text.secondary">
-                  Role
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  {user.role || 'N/A'}
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="body2" color="text.secondary">
-                  Status
-                </Typography>
-                <Chip
-                  label={user.status || 'N/A'}
-                  color={user.status === 'active' ? 'success' : 'default'}
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography variant="body2" color="text.secondary">
-                  Created
-                </Typography>
-                <Typography variant="h6" gutterBottom>
-                  {new Date(user.createdAt).toLocaleDateString()}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
+          <Box sx={{ minWidth: { xs: '100%', md: 'calc(75% - 18px)' } }}>
+            <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap' }}>
+                              <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                  <Typography variant="body2" color="text.secondary">
+                    User ID
+                  </Typography>
+                  <Typography variant="h6" gutterBottom>
+                    {user.userId}
+                  </Typography>
+                </Box>
+                <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Name
+                  </Typography>
+                  <Typography variant="h6" gutterBottom>
+                    {user.name}
+                  </Typography>
+                </Box>
+                <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Email
+                  </Typography>
+                  <Typography variant="h6" gutterBottom>
+                    {user.email}
+                  </Typography>
+                </Box>
+                <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Role
+                  </Typography>
+                  <Typography variant="h6" gutterBottom>
+                    {user.role || 'N/A'}
+                  </Typography>
+                </Box>
+                <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Status
+                  </Typography>
+                  <Chip
+                    label={user.status || 'N/A'}
+                    color={user.status === 'active' ? 'success' : 'default'}
+                    size="small"
+                  />
+                </Box>
+                <Box sx={{ minWidth: { xs: '100%', sm: 'calc(50% - 8px)' } }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Created
+                  </Typography>
+                  <Typography variant="h6" gutterBottom>
+                    {new Date(user.createdAt).toLocaleDateString()}
+                  </Typography>
+                </Box>
+            </Stack>
+          </Box>
+        </Stack>
       </Paper>
 
       {/* Transactions Section */}
@@ -267,9 +267,12 @@ const UserDetail: React.FC = () => {
             <DataGrid
               rows={user.Transactions}
               columns={transactionColumns}
-              pageSize={5}
-              rowsPerPageOptions={[5, 10, 25]}
-              disableSelectionOnClick
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10, 25]}
               getRowId={(row) => row.transactionId}
               sx={{
                 '& .MuiDataGrid-cell:focus': {
