@@ -7,6 +7,7 @@ import {
   Button,
   Alert,
   CircularProgress,
+  Stack,
 } from '@mui/material';
 import { DataGrid, GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 import { Visibility as ViewIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
@@ -135,7 +136,7 @@ const Users: React.FC = () => {
       headerName: 'Created',
       width: 150,
       sortable: true,
-      valueFormatter: (params) => new Date(params.value).toLocaleDateString(),
+              valueFormatter: (params: any) => new Date(params.value).toLocaleDateString(),
     },
     {
       field: 'actions',
@@ -159,7 +160,7 @@ const Users: React.FC = () => {
           icon={<DeleteIcon />}
           label="Delete"
           onClick={() => handleDeleteUser(params.row.userId)}
-          color="error"
+          color="primary"
         />,
       ],
     },
@@ -198,9 +199,12 @@ const Users: React.FC = () => {
         <DataGrid
           rows={users}
           columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10, 25, 50]}
-          disableSelectionOnClick
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+          }}
+          pageSizeOptions={[10, 25, 50]}
           getRowId={(row) => row.userId}
           sx={{
             '& .MuiDataGrid-cell:focus': {
