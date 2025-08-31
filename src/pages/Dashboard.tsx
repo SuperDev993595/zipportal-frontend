@@ -25,10 +25,15 @@ const Dashboard: React.FC = () => {
     totalTransactions: 0,
     totalAmount: 0,
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        setLoading(true);
+        setError(null);
+        
         const [usersResponse, transactionsResponse] = await Promise.all([
           usersApi.getAll(),
           transactionsApi.getAll(),
@@ -45,6 +50,9 @@ const Dashboard: React.FC = () => {
         });
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
+        setError('Failed to load dashboard statistics');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -99,8 +107,29 @@ const Dashboard: React.FC = () => {
     },
   ];
 
+  if (loading) {
+    return (
+      <Box sx={{ p: 3, textAlign: 'center' }}>
+        <Typography variant="h6">Loading dashboard...</Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ p: 3, textAlign: 'center' }}>
+        <Typography variant="h6" color="error" gutterBottom>
+          {error}
+        </Typography>
+        <Button variant="contained" onClick={() => window.location.reload()}>
+          Retry
+        </Button>
+      </Box>
+    );
+  }
+
   return (
-    <Box>
+    <Box sx={{ p: 3 }}>
       <Typography variant="h4" component="h1" gutterBottom>
         Dashboard
       </Typography>
