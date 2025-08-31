@@ -59,7 +59,8 @@ const Upload: React.FC = () => {
       setUploadResult(response.data);
       setSelectedFile(null);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Upload failed. Please try again.');
+      const errorMessage = err.response?.data?.error || err.response?.data?.details || err.message || 'Upload failed. Please try again.';
+      setError(errorMessage);
       console.error('Upload error:', err);
     } finally {
       setUploading(false);
@@ -155,7 +156,22 @@ const Upload: React.FC = () => {
       {/* Error Display */}
       {error && (
         <Alert severity="error" sx={{ mt: 3 }}>
-          {error}
+          <Typography variant="body1" gutterBottom>
+            <strong>Upload Error:</strong>
+          </Typography>
+          <Typography variant="body2" component="pre" sx={{ 
+            whiteSpace: 'pre-wrap', 
+            fontFamily: 'monospace',
+            fontSize: '0.875rem',
+            backgroundColor: 'rgba(0,0,0,0.05)',
+            p: 1,
+            borderRadius: 1
+          }}>
+            {error}
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            Please check your ZIP file format and try again.
+          </Typography>
         </Alert>
       )}
 
