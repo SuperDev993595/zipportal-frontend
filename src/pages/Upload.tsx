@@ -173,10 +173,10 @@ const Upload: React.FC = () => {
             <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap' }}>
               <Box sx={{ minWidth: { xs: '100%', sm: 'calc(33.33% - 16px)' } }}>
                 <Typography variant="body2" color="text.secondary">
-                  Users Processed
+                  User Processed
                 </Typography>
                 <Typography variant="h6" color="success.main">
-                  {uploadResult.usersProcessed}
+                  {uploadResult.userProcessed ? 'Yes' : 'No'}
                 </Typography>
               </Box>
               <Box sx={{ minWidth: { xs: '100%', sm: 'calc(33.33% - 16px)' } }}>
@@ -215,10 +215,10 @@ const Upload: React.FC = () => {
           </Typography>
           <Box component="ul" sx={{ pl: 2 }}>
             <Typography component="li" variant="body2" color="text.secondary">
-              <strong>userData.json</strong> - Array of user objects with userId, name, email, role, and status
+              <strong>userData.json</strong> - Single user object with firstName, lastName, birthday, country, and phone
             </Typography>
             <Typography component="li" variant="body2" color="text.secondary">
-              <strong>transactions.json</strong> - Array of transaction objects with transactionId, userId, amount, type, description, status, and date
+              <strong>transactions.json</strong> - Array of transaction objects with reference, amount, currency, message, and timestamp
             </Typography>
             <Typography component="li" variant="body2" color="text.secondary">
               <strong>avatar.png</strong> - User avatar image (optional)
