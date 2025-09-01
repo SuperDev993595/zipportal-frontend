@@ -111,7 +111,7 @@ const Users: React.FC = () => {
       renderCell: (params) => (
         params.value ? (
           <img
-            src={`http://localhost:5000/uploads/${params.value}`}
+            src={`${process.env.REACT_APP_UPLOAD_URL}/${params.value}`}
             alt="Avatar"
             style={{
               width: 40,
