@@ -89,7 +89,7 @@ const UserDetail: React.FC = () => {
             <Box display="flex" flexDirection="column" alignItems="center">
               {user.avatar ? (
                 <Avatar
-                  src={`http://localhost:5000/uploads/${user.avatar}`}
+                  src={`${process.env.REACT_APP_UPLOAD_URL || 'http://31.97.183.104:5000/uploads'}/${user.avatar}`}
                   sx={{ width: 120, height: 120, mb: 2 }}
                 />
               ) : (
