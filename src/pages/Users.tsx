@@ -86,22 +86,6 @@ const Users: React.FC = () => {
       headerName: 'Birthday',
       width: 120,
       sortable: true,
-      valueFormatter: (params: any) => {
-        if (!params.value) return 'N/A';
-        try {
-          const date = new Date(params.value);
-          if (isNaN(date.getTime())) {
-            return 'Invalid Date';
-          }
-          return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-          });
-        } catch (error) {
-          return 'Invalid Date';
-        }
-      },
     },
     {
       field: 'avatar',
@@ -111,7 +95,7 @@ const Users: React.FC = () => {
       renderCell: (params) => (
         params.value ? (
           <img
-            src={`${process.env.REACT_APP_UPLOAD_URL}/${params.value}`}
+            src={`http://31.97.183.104:5000/uploads/${params.value}`}
             alt="Avatar"
             style={{
               width: 40,
